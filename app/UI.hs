@@ -136,6 +136,7 @@ start = do
   let initState = initialState playlist library st
   song <- currentSong
   let appState = initState & playlistStateL . Playlist.playingSongL .~ song
+  vtyinit <- Vty.mkVty defaultConfig
   _ <- async $ mpdLoop mpdEventChan
-  void $ M.customMain (Vty.mkVty defaultConfig)
+  void $ M.customMain vtyinit (Vty.mkVty defaultConfig)
                     (Just mpdEventChan) app appState

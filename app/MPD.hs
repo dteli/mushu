@@ -16,7 +16,7 @@ module MPD
 , mpdReq
 ) where
 
-import ClassyPrelude
+import ClassyPrelude hiding ((<&>))
 
 import Control.Exception.Safe (throw)
 

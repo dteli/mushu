@@ -132,17 +132,17 @@ mkState artistsName albumsName songsName library = LibraryState
 
 handleEvent :: Vty.Event -> LibraryState n -> EventM n (LibraryState n)
 handleEvent event state = case event of
-  (Vty.EvKey (Vty.KChar 'j') []) -> case activeColumn of
+  (Vty.EvKey Vty.KDown []) -> case activeColumn of
     ArtistsColumn -> return $ nextArtist state
     AlbumsColumn -> return $ nextAlbum state
     SongsColumn -> return $ nextSong state
-  (Vty.EvKey (Vty.KChar 'k') []) -> case activeColumn of
+  (Vty.EvKey Vty.KUp []) -> case activeColumn of
     ArtistsColumn -> return $ previousArtist state
     AlbumsColumn -> return $ previousAlbum state
     SongsColumn -> return $ previousSong state
-  (Vty.EvKey (Vty.KChar 'l') []) -> return $ nextColumn state
-  (Vty.EvKey (Vty.KChar 'h') []) -> return $ previousColumn state
-  (Vty.EvKey (Vty.KChar 'a') []) -> void (liftIO (addToPlaylist state False)) >> return (next state)
+  (Vty.EvKey Vty.KRight []) -> return $ nextColumn state
+  (Vty.EvKey Vty.KLeft []) -> return $ previousColumn state
+  (Vty.EvKey (Vty.KChar ' ') []) -> void (liftIO (addToPlaylist state False)) >> return (next state)
   (Vty.EvKey Vty.KEnter []) -> void (liftIO (addToPlaylist state True)) >> return (next state)
   (Vty.EvKey (Vty.KChar 't') []) -> return $ toggleMode state
   _ -> return state
