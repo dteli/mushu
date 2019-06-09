@@ -1,21 +1,23 @@
 module MPD
-( currentSong
-, togglePlayPause
-, fetchPlaylist
-, fetchAllSongs
-, fetchAllArtists
-, fetchArtistAlbums
-, fetchArtistAlbumSongs
-, fetchStatus
-, clearPlaylist
-, addArtistToPlaylist
-, addAlbumToPlaylist
-, addSongToPlaylist
-, setVolume
-, tag
-, mpdReq
+  ( currentSong
+  , togglePlayPause
+  , fetchPlaylist
+  , fetchAllSongs
+  , fetchAllArtists
+  , fetchArtistAlbums
+  , fetchArtistAlbumSongs
+  , fetchStatus
+  , clearPlaylist
+  , addArtistToPlaylist
+  , addAlbumToPlaylist
+  , addSongToPlaylist
+  , setVolume
+  , tag
+  , mpdReq
   , stopPlayback
-) where
+  , playNext
+  , playPrevious
+  ) where
 
 import ClassyPrelude hiding ((<&>))
 
@@ -166,6 +168,20 @@ seekToPercent p = do
 stopPlayback ∷ IO ()
 stopPlayback = do
   res ← withMPD M.stop
+  case res of
+    Left _ → return ()
+    Right _ → return ()
+
+playNext ∷ IO ()
+playNext = do
+  res ← withMPD M.next
+  case res of
+    Left _ → return ()
+    Right _ → return ()
+
+playPrevious ∷ IO ()
+playPrevious = do
+  res ← withMPD M.previous
   case res of
     Left _ → return ()
     Right _ → return ()

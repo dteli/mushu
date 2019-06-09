@@ -29,7 +29,8 @@ import qualified Graphics.Vty as Vty
 import Graphics.Vty.Config (defaultConfig)
 
 import Network.MPD (Song, idle, Subsystem(..), Status(..))
-import MPD (togglePlayPause, fetchPlaylist, fetchStatus, clearPlaylist, mpdReq, setVolume, currentSong, stopPlayback)
+import MPD (togglePlayPause, fetchPlaylist, fetchStatus, clearPlaylist, mpdReq, setVolume, currentSong,
+            stopPlayback, playNext, playPrevious)
 
 type NextState n = EventM n (Next (AppState n))
 
@@ -54,7 +55,9 @@ appEvent state event = case event of
       VtyEvent (Vty.EvKey (Vty.KChar '2') []) -> M.continue $ state & activeView .~ LibraryView
       VtyEvent (Vty.EvKey (Vty.KChar '-') []) -> void (liftIO (decreaseVolume state)) >> M.continue state
       VtyEvent (Vty.EvKey (Vty.KChar '+') []) -> void (liftIO (increaseVolume state)) >> M.continue state
-      VtyEvent (Vty.EvKey (Vty.KChar 's') []) → void (liftIO stopPlayback) >> M.continue state
+      VtyEvent (Vty.EvKey (Vty.KChar 's') []) → liftIO stopPlayback >> M.continue state
+      VtyEvent (Vty.EvKey (Vty.KChar '>') []) → liftIO playNext >> M.continue state
+      VtyEvent (Vty.EvKey (Vty.KChar '<') []) → liftIO playPrevious >> M.continue state
       ev -> handleViewEvent state ev
 
 handleViewEvent :: AppState UIName -> BrickEvent UIName e -> NextState UIName
