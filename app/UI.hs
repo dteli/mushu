@@ -6,6 +6,8 @@ import ClassyPrelude hiding (catch)
 import Library
 import UI.Types
 
+import Control.Concurrent (forkIO, threadDelay)
+
 import Lens.Micro.Platform ((^.), (&), (.~), (%~))
 
 import qualified UI.Utils as Utils
@@ -17,6 +19,7 @@ import qualified UI.Widgets.Playlist as Playlist
 import qualified UI.Widgets.Filter as Filter
 import qualified UI.Widgets.Notification as Notification
 import qualified UI.Widgets.Library as LibraryWidget
+import qualified UI.Widgets.ProgBar as ProgBar
 import UI.Widgets.Filter (isFocusedL)
 
 import Brick.Types (Widget, EventM, Next, BrickEvent(..))
@@ -107,6 +110,7 @@ attributesMap = attrMap Vty.defAttr $ concat
   , Status.attrs
   , LibraryWidget.attrs
   , Filter.attrs
+  , ProgBar.attrs
   ]
 
 app :: M.App (AppState UIName) MPDEvent UIName
@@ -142,5 +146,8 @@ start = do
   let appState = initState & playlistStateL . Playlist.playingSongL .~ song
   vtyinit <- Vty.mkVty defaultConfig
   _ <- async $ mpdLoop mpdEventChan
+  forkIO $ forever $ do
+    writeBChan mpdEventChan MPDStatusEvent
+    threadDelay 2000000
   void $ M.customMain vtyinit (Vty.mkVty defaultConfig)
                     (Just mpdEventChan) app appState

@@ -68,7 +68,7 @@ mkWidget state playingSong = hCenter $ withAttr attrName $ widgets
     title = hCenter $ withAttr titleAttrName $ mkTagWidget Title "<untitled>" playingSong
     artist = withAttr artistAttrName $ mkTagWidget Artist "<unknown artist>" playingSong
     album = withAttr albumAttrName $ mkTagWidget Album "<unknown album>" playingSong
-    artistAlbum = hCenter $ artist <+> (str " - ") <+> album
+    artistAlbum = hCenter $ artist <+> (str "  ∷  ") <+> album
     playbackState = mkStateWidget st
     volume = mkVolumeWidget st
 

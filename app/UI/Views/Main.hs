@@ -16,6 +16,7 @@ import qualified UI.Widgets.Status as Status
 import qualified UI.Widgets.Help as Help
 import qualified UI.Widgets.Notification as Notification
 import UI.Widgets.Playlist (playingSongL)
+import qualified UI.Widgets.ProgBar as ProgBar
 
 import UI.Types
 
@@ -31,6 +32,8 @@ draw state widget = [ui]
                    Status.mkWidget state (state^.playlistStateL.playingSongL)
                   , hBorder
                   , hCenter widget
+                  , hBorder
+                  , ProgBar.mkWidget state
                   , view
                   , Notification.mkWidget (state^.notificationState)
                   ]
