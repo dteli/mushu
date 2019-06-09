@@ -14,6 +14,7 @@ module MPD
 , setVolume
 , tag
 , mpdReq
+  , stopPlayback
 ) where
 
 import ClassyPrelude hiding ((<&>))
@@ -162,3 +163,9 @@ seekToPercent p = do
 
 -- seekToSeconds ∷ Integer → IO ()
 
+stopPlayback ∷ IO ()
+stopPlayback = do
+  res ← withMPD M.stop
+  case res of
+    Left _ → return ()
+    Right _ → return ()
