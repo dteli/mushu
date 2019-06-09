@@ -43,6 +43,7 @@ import Network.MPD
   , findAdd
   , toString
   , (=?), (<&>)
+  , seek
   )
 import qualified Network.MPD as M
 
@@ -143,3 +144,21 @@ setVolume volume = void $ withMPD $ M.setVolume volume
 
 tag :: Metadata -> Text -> Song -> Text
 tag key def song = concat (pack <$> toString <$> findWithDefault [fromString (unpack def)] key (sgTags song))
+
+
+-- ETD adds below this line ----------------------------
+
+seekToPercent ∷ Integer → IO ()
+seekToPercent p = do
+  csong ← withMPD M.currentSong
+  case csong of
+    Left _ → return ()
+    Right (Just s) → let mpos = sgIndex s
+                         l = sgLength s in
+                       case mpos of
+                         Nothing → return ()
+                         Just pos → void $ withMPD $ seek pos (round $ (fromInteger l) * ((fromInteger p) / 100))
+    
+
+-- seekToSeconds ∷ Integer → IO ()
+

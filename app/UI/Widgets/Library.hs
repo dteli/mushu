@@ -243,7 +243,7 @@ getSelected state = (artist, album, title)
     artist = case state^.libraryModeL of
       ArtistsAlbumsSongsMode -> listGetSelected $ state^.libraryArtistsL
       AlbumsSongsMode -> Nothing
-    album = if activeColumn == AlbumsColumn then
+    album = if activeColumn == AlbumsColumn || activeColumn == SongsColumn then
       listGetSelected $ state^.libraryAlbumsL else Nothing
     title = if activeColumn == SongsColumn then
       listGetSelected $ state^.librarySongsL else Nothing
